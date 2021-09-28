@@ -25,7 +25,7 @@ func RequestHandler() {
 	h := c.Handler(r)
 	srv := &http.Server{
 		Handler: h,
-		Addr:    "127.0.0.1:3000", WriteTimeout: 15 * time.Second,
+		Addr:    "127.0.0.1:8000", WriteTimeout: 15 * time.Second,
 		ReadTimeout: 15 * time.Second,
 	}
 

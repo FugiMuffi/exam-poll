@@ -1,18 +1,28 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import { useState } from 'react'
 import styles from '../styles/Home.module.scss'
 
-// NOTE: TEMP
-
 const createPoll = async () => {
-  const response = await fetch('http://localhost:3000/createPoll', {
-    
+  const response = await fetch('http://localhost:8000/createPoll', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      title: "Test title",
+      description: "test-desct",
+      fingerprint: "some fingerprint",
+      duration: "1d",
+     })
   });
-  console.log(response);
+  let data = await response.json();
+  console.log(data)
+
 }
 
-
 const Home: NextPage = () => {
+
   return (
     <div className={styles.container}>
       <Head>
@@ -27,6 +37,7 @@ const Home: NextPage = () => {
       </main>
     </div>
   )
+
 }
 
 export default Home
