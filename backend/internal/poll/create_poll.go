@@ -20,7 +20,7 @@ func HandlePollCreation(r Poll) (Poll, error) {
 		}
 	}
 
-	r.Results = Grades{map[string]uint32{
+	r.Results = map[string]uint32{
 		"1.0": 0,
 		"1.3": 0,
 		"1.7": 0,
@@ -32,7 +32,7 @@ func HandlePollCreation(r Poll) (Poll, error) {
 		"3.7": 0,
 		"4.0": 0,
 		"5.0": 0,
-	}}
+	}
 
 	newIdt := CreateIdentifier(6)
 	r.Idt = newIdt

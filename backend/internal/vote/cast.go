@@ -38,7 +38,7 @@ func castVote(fingerprint string, idt string, grade string) (poll.Poll, error) {
 	}
 
 	newPoll.Participants[fingerprint] = grade
-	newPoll.Results.Grade[grade] += 1
+	newPoll.Results[grade] += 1
 
 	var result poll.Poll
 	err = collection.FindOneAndReplace(ctx, bson.M{"idt": idt}, bson.M{
