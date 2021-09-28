@@ -15,6 +15,7 @@ func RequestHandler() {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/createPoll", poll.HandleNewPoll)
+	r.HandleFunc("/getPoll/{idt}", poll.HandleGetPoll)
 
 	http.Handle("/", r)
 
