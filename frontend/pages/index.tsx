@@ -2,6 +2,16 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import styles from '../styles/Home.module.scss'
 
+// NOTE: TEMP
+
+const createPoll = async () => {
+  const response = await fetch('http://localhost:3000/createPoll', {
+    
+  });
+  console.log(response);
+}
+
+
 const Home: NextPage = () => {
   return (
     <div className={styles.container}>
@@ -13,7 +23,7 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1>Exam Poll</h1>
-        <button>Create Poll</button>
+        <button onClick={() => createPoll()}>Create Poll</button>
       </main>
     </div>
   )
