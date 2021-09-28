@@ -36,6 +36,7 @@ func HandlePollCreation(r Poll) (Poll, error) {
 
 	newIdt := CreateIdentifier(6)
 	r.Idt = newIdt
+	r.Participants = make(map[string]string)
 
 	endTime, err := parseTime(r.CurTime, r.Duration)
 	if err != nil {
@@ -62,13 +63,14 @@ func insertNewPoll(p Poll) error {
 	ctx := context.Background()
 	_, err := collection.InsertOne(ctx,
 		bson.M{
-			"idt":         p.Idt,
-			"title":       p.Title,
-			"description": p.Description,
-			"end_time":    p.EndTime,
-			"cur_time":    p.CurTime,
-			"duration":    p.Duration,
-			"results":     p.Results,
+			"idt":          p.Idt,
+			"title":        p.Title,
+			"description":  p.Description,
+			"end_time":     p.EndTime,
+			"cur_time":     p.CurTime,
+			"duration":     p.Duration,
+			"results":      p.Results,
+			"participants": p.Participants,
 		})
 	if err != nil {
 		return errors.New("an error has occurred inserting the poll into the database")
