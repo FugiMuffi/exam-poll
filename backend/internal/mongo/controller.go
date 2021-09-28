@@ -2,19 +2,20 @@ package mongo
 
 import (
 	"context"
+	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"time"
 )
 
-func GetClient() (*mongo.Client, *context.Context, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI("mongodb://localhost:27017")) /* TODO: fix address using .env*/
-
-	if err != nil {
-		return nil, nil, err
+func GetClient() *mongo.Client {
+	var err error
+	var client *mongo.Client
+	uri := "mongodb://localhost:27017" /* TODO: .env uri */
+	opts := options.Client()
+	opts.ApplyURI(uri)
+	opts.SetMaxPoolSize(5)
+	if client, err = mongo.Connect(context.Background(), opts); err != nil {
+		fmt.Println(err.Error())
 	}
-	return client, &ctx, nil
+	return client
 }
-

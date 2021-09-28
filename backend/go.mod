@@ -3,6 +3,7 @@ module github.com/trivo25/exam-poll/backend
 go 1.17
 
 require (
+	github.com/TwinProduction/go-away v1.3.0 // indirect
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
@@ -16,5 +17,5 @@ require (
 	go.mongodb.org/mongo-driver v1.7.2 // indirect
 	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073 // indirect
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e // indirect
-	golang.org/x/text v0.3.5 // indirect
+	golang.org/x/text v0.3.7 // indirect
 )

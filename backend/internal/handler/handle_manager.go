@@ -4,20 +4,17 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
+	"github.com/trivo25/exam-poll/backend/internal/poll"
 	"net/http"
 	"time"
 )
 
-
-func RequestHandler(){
+func RequestHandler() {
 
 	fmt.Println("Initializing http server..")
 	r := mux.NewRouter()
 
-
-
-	r.HandleFunc("/createPoll", HandleNewPoll)
-
+	r.HandleFunc("/createPoll", poll.HandleNewPoll)
 
 	http.Handle("/", r)
 
@@ -32,13 +29,10 @@ func RequestHandler(){
 		ReadTimeout: 15 * time.Second,
 	}
 
-
 	err := srv.ListenAndServe()
 
 	if err != nil {
 		fmt.Println("some error has occurred creating the http server")
 	}
-
-
 
 }
