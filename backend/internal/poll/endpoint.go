@@ -8,11 +8,6 @@ import (
 	"time"
 )
 
-type Grades struct {
-	/* ["grade", amount_of_votes] */
-	Grade map[string]uint32
-}
-
 type Response struct {
 	Error     string
 	ErrorCode int

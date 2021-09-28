@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rs/cors"
 	"github.com/trivo25/exam-poll/backend/internal/poll"
+	"github.com/trivo25/exam-poll/backend/internal/vote"
 	"net/http"
 	"time"
 )
@@ -16,7 +17,7 @@ func RequestHandler() {
 
 	r.HandleFunc("/createPoll", poll.HandleNewPoll)
 	r.HandleFunc("/getPoll/{idt}", poll.HandleGetPoll)
-
+	r.HandleFunc("/castVote", vote.CastNewVote)
 	http.Handle("/", r)
 
 	c := cors.New(cors.Options{
