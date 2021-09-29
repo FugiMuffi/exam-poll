@@ -4,10 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"reflect"
+
 	goaway "github.com/TwinProduction/go-away"
 	"github.com/trivo25/exam-poll/backend/internal/mongo"
 	"go.mongodb.org/mongo-driver/bson"
-	"reflect"
 )
 
 func HandlePollCreation(r Poll) (Poll, error) {
@@ -16,7 +17,7 @@ func HandlePollCreation(r Poll) (Poll, error) {
 
 	for i := 0; i < v.NumField(); i++ {
 		if goaway.IsProfane(fmt.Sprintf("%v", v.Field(i).Interface())) {
-			return Poll{}, errors.New("Woooooow - stop right there criminal scum! There is fould language in your request")
+			return Poll{}, errors.New("Woooooow - stop right there criminal scum! There is foul language in your request")
 		}
 	}
 

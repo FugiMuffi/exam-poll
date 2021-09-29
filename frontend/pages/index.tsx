@@ -1,27 +1,48 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import { useState } from 'react'
+import { useRouter } from 'next/router'
 import styles from '../styles/Home.module.scss'
 
-const createPoll = async () => {
-  const response = await fetch('http://localhost:8000/createPoll', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      title: "Test title",
-      description: "test-desct",
-      fingerprint: "some fingerprint",
-      duration: "1d",
-     })
-  });
-  let data = await response.json();
-  console.log(data)
-
-}
 
 const Home: NextPage = () => {
+
+  const router = useRouter();
+
+  const createPoll = async (e: React.FormEvent<HTMLElement>) => {
+    e.preventDefault();
+
+    const form = e.target as typeof e.target & {
+      title: { value: string };
+      description: { value: string };
+      duration: { value: string };
+    };
+
+    const response = await fetch('http://localhost:8000/createPoll', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        title: form.title.value,
+        description: form.description.value,
+        fingerprint: "some fingerprint",
+        duration: form.duration.value,
+      })
+    });
+
+    const res = await response.json();
+    console.log(res);
+
+    if (res.Type == "failure") {
+      alert(res.Error);
+      return
+    }
+
+    if (res.Type == "success") {
+      router.push(`/poll/${res.Data.idt}`);
+      return
+    }
+  }
 
   return (
     <div className={styles.container}>
@@ -33,7 +54,27 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1>Exam Poll</h1>
-        <button onClick={() => createPoll()}>Create Poll</button>
+
+        <form onSubmit={createPoll} className={styles.form}>
+          <label htmlFor="poll_title">Title</label>
+          <input type="text" id="poll_title" name="title"/>
+
+          <label htmlFor="poll_description">Description</label>
+          <input type="text" id="poll_description" name="description"/>
+
+          <label htmlFor="poll_duration">Duration</label>
+          <select id="poll_duration" name="duration" defaultValue="1d">
+            <option value="4h">4h</option>
+            <option value="8h">8h</option>
+            <option value="12h">12h</option>
+            <option value="1d">1d</option>
+            <option value="2d">2d</option>
+            <option value="4d">4d</option>
+            <option value="7d">7d</option>
+          </select>
+
+          <button type="submit">Create Poll</button>
+        </form>
       </main>
     </div>
   )

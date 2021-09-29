@@ -113,6 +113,17 @@
   margin-left: 0.5rem;
 }
 
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align-last: center;
+
+  input, select {
+    margin-bottom: 1rem;
+  }
+}
+
 @media (max-width: 600px) {
   .grid {
     width: 100%;
