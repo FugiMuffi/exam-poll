@@ -1,7 +1,10 @@
 import type { NextPage, GetServerSidePropsContext } from 'next'
-import Error from 'next/error'
+import type { GetPoll, GetPollData } from 'types/getPoll'
 import styles from 'styles/Poll.module.scss'
-import { GetPoll, GetPollData } from 'types/getPoll'
+import Head from 'next/head'
+import Error from 'next/error'
+import Moment from 'react-moment'
+import { useState } from 'react'
 
 
 type Props = { data: GetPollData } & { errorCode: number, errorMsg?: string }
@@ -9,12 +12,30 @@ type Props = { data: GetPollData } & { errorCode: number, errorMsg?: string }
 const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
   if (errorCode) return <Error statusCode={errorCode} title={errorMsg} />
 
-  return (
-    <div className={styles.container}>
-      <p>{data.title}</p>
-    </div>
-  )
+  const end_date = new Date(data.end_time * 1000);
 
+  const [timerFinished, setTimerFinished] = useState(false);
+
+  const checkTimerFinished = () => {
+    if (!timerFinished && end_date < new Date()) setTimerFinished(true);
+  }
+
+  checkTimerFinished();
+
+  return (
+    <>
+      <Head>
+        <title>{data.title}</title>
+        <meta name="description" content={data.description} />
+      </Head>
+
+      <main className={styles.main}>
+        <h1>{data.title}</h1>
+        <p>{data.description}</p>
+        <p>{ timerFinished ? 'This poll has ended.' : <>This poll ends <Moment fromNow date={end_date} onChange={checkTimerFinished} />.</> }</p>
+      </main>
+    </>
+  )
 }
 
 export async function getServerSideProps({ res, params }: GetServerSidePropsContext<{ idt: string }>) {

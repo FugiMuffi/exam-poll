@@ -1,16 +1,6 @@
-.container {
-  min-height: 100vh;
-  padding: 0 0.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
 .main {
-  padding: 5rem 0;
-  flex: 1;
+  min-height: 100vh;
+  padding: 5rem 0.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -25,5 +15,9 @@
 
   input, select {
     margin-bottom: 1rem;
+  }
+
+  button {
+    margin-top: 1rem;
   }
 }
