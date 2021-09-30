@@ -8,11 +8,6 @@ type Poll struct {
 	EndTime      int64             `json:"end_time"  bson:"end_time"`
 	CurTime      int64             `json:"cur_time"  bson:"cur_time"`
 	Idt          string            `json:"idt"  bson:"idt"`
-	Results      Grades            `json:"results"  bson:"results"`
+	Results      map[string]uint32 `json:"results"  bson:"results"`
 	Participants map[string]string `json:"participants"  bson:"participants"`
-}
-
-type Grades struct {
-	/* ["grade", amount_of_votes] */
-	Grade map[string]uint32
 }
