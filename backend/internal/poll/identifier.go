@@ -28,6 +28,16 @@ func CreateIdentifier(length int) string {
 
 }
 
+func CreateEditCode(length int) string {
+
+	rand.Seed(time.Now().UnixNano())
+	b := make([]byte, length)
+	rand.Read(b)
+	idt := fmt.Sprintf("%x", b)[:length]
+	return idt
+
+}
+
 func checkIdentifierExistance(idt string) bool {
 	c := mongo.GetClient()
 	defer func() {
