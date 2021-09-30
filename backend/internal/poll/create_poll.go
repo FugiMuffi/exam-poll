@@ -37,7 +37,7 @@ func HandlePollCreation(r Poll) (Poll, error) {
 
 	editCode := CreateEditCode(12)
 	r.EditCode = editCode
-
+	r.State = "active"
 	newIdt := CreateIdentifier(6)
 	r.Idt = newIdt
 	r.Participants = make(map[string]string)
@@ -76,6 +76,7 @@ func insertNewPoll(p Poll) error {
 			"results":      p.Results,
 			"participants": p.Participants,
 			"edit":         p.EditCode,
+			"state":        p.State,
 		})
 	if err != nil {
 		return errors.New("an error has occurred inserting the poll into the database")

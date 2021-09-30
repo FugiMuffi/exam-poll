@@ -18,7 +18,7 @@ func HandleVoteCast(vote Vote) (poll.Poll, error) {
 		}
 		return newpoll, nil
 	}
-	return poll.Poll{}, nil
+	return poll.Poll{}, errors.New("some error occurred casting your vote")
 }
 
 func castVote(fingerprint string, idt string, grade string) (poll.Poll, error) {
@@ -84,5 +84,8 @@ func verifyVote(fingerprint string, idt string) bool {
 		return false
 	}
 
+	if poll.State == "closed" {
+		return false
+	}
 	return true
 }
