@@ -10,4 +10,5 @@ type Poll struct {
 	Idt          string            `json:"idt"  bson:"idt"`
 	Results      map[string]uint32 `json:"results"  bson:"results"`
 	Participants map[string]string `json:"participants"  bson:"participants"`
+	EditCode     string            `json:"edit"  bson:"edit"`
 }

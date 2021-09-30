@@ -18,6 +18,7 @@ func RequestHandler() {
 	r.HandleFunc("/createPoll", poll.HandleNewPoll)
 	r.HandleFunc("/getPoll/{idt}", poll.HandleGetPoll)
 	r.HandleFunc("/castVote", vote.CastNewVote)
+	r.HandleFunc("/editPoll", poll.HandleEditPoll)
 	http.Handle("/", r)
 
 	c := cors.New(cors.Options{
