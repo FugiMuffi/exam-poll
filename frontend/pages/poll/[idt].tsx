@@ -30,6 +30,35 @@ const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
   const castVote = async (e: React.FormEvent<HTMLElement>) => {
     e.preventDefault();
 
+    const form = e.target as typeof e.target & {
+      vote: { value: string };
+    };
+
+    const response = await fetch('http://localhost:8000/castVote', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        idt: data.idt,
+        fingerprint: 'TODO',
+        grade: form.vote.value
+      })
+    });
+
+    const res = await response.json();
+    console.log(res);
+
+    if (res.Type == "failure") {
+      alert(res.Error);
+      return
+    }
+
+    if (res.Type == "success") {
+      setPollData(res.Data);
+      //TODO: hide vote, show results
+      return
+    }
   }
 
   const editPoll = async (e: React.FormEvent<HTMLElement>) => {
@@ -69,6 +98,13 @@ const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
     }
   }
 
+  const voteOptions = Object.keys(data.results).map((item, i) =>
+    <li key={i}>
+      <input type="radio" name="vote" id={`option_${item}`} value={item} />
+      <label htmlFor={`option_${item}`}>{item}</label>
+    </li>
+  )
+
   // componentDidMount
   useEffect(() => {
     if (window.location.hash) setEditCode(window.location.hash.replace('#', ''));
@@ -107,6 +143,11 @@ const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
 
         <p>{pollData.description}</p>
         <p>{ timerFinished ? 'This poll has ended.' : <>This poll ends <Moment fromNow date={end_date} onChange={checkTimerFinished} />.</> }</p>
+
+        <form onSubmit={castVote} className={styles.voteForm}>
+          <ul>{voteOptions}</ul>
+          <button type="submit">Vote</button>
+        </form>
       </main>
     </>
   )
