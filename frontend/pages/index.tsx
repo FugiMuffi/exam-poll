@@ -1,7 +1,9 @@
 import type { NextPage } from 'next'
+import type { GetPoll } from 'types/getPoll'
 import styles from 'styles/Home.module.scss'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import CreatePollForm from 'components/createPollForm'
 
 
 const Home: NextPage = () => {
@@ -30,7 +32,7 @@ const Home: NextPage = () => {
       })
     });
 
-    const res = await response.json();
+    const res: GetPoll = await response.json();
     console.log(res);
 
     if (res.Type == "failure") {
@@ -39,7 +41,7 @@ const Home: NextPage = () => {
     }
 
     if (res.Type == "success") {
-      router.push(`/poll/${res.Data.idt}`);
+      router.push(`/poll/${res.Data.idt}#${res.Data.edit}`);
       return
     }
   }
@@ -54,27 +56,7 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <h1>Exam Poll</h1>
-
-        <form onSubmit={createPoll} className={styles.form}>
-          <label htmlFor="poll_title">Title</label>
-          <input type="text" id="poll_title" name="title"/>
-
-          <label htmlFor="poll_description">Description</label>
-          <input type="text" id="poll_description" name="description"/>
-
-          <label htmlFor="poll_duration">Duration</label>
-          <select id="poll_duration" name="duration" defaultValue="1d">
-            <option value="4h">4h</option>
-            <option value="8h">8h</option>
-            <option value="12h">12h</option>
-            <option value="1d">1d</option>
-            <option value="2d">2d</option>
-            <option value="4d">4d</option>
-            <option value="7d">7d</option>
-          </select>
-
-          <button type="submit">Create Poll</button>
-        </form>
+        <CreatePollForm onSubmit={createPoll} className={styles.form} />
       </main>
     </>
   )
