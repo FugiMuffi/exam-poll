@@ -6,10 +6,9 @@ export type GetPollData = {
   "end_time": number,
   "cur_time": number,
   "idt": string,
+  "edit": string?,
   "results": {
-    "Grade": {
-      [option: string]: number
-    }
+    [option: string]: number
   }
 }
 
