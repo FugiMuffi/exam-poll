@@ -10,7 +10,7 @@ import (
 )
 
 func HandleVoteCast(vote Vote) (poll.Poll, error) {
-	if verifyVote(vote.Fingerprint, vote.Idt) {
+	if verifyVote(vote.Fingerprint, vote.Idt, vote.Grade) {
 
 		newpoll, err := castVote(vote.Fingerprint, vote.Idt, vote.Grade)
 		if err != nil {
@@ -60,7 +60,7 @@ func castVote(fingerprint string, idt string, grade string) (poll.Poll, error) {
 
 }
 
-func verifyVote(fingerprint string, idt string) bool {
+func verifyVote(fingerprint string, idt string, vote string) bool {
 
 	c := mongo.GetClient()
 	defer func() {
@@ -81,6 +81,13 @@ func verifyVote(fingerprint string, idt string) bool {
 	_, exist := participants[fingerprint]
 	fmt.Println(exist)
 	if exist {
+		return false
+	}
+
+	votes := poll.Results
+	_, exist = votes[vote]
+
+	if !exist {
 		return false
 	}
 
