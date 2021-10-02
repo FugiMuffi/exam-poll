@@ -3,6 +3,7 @@ package poll
 import (
 	"context"
 	"fmt"
+	"github.com/trivo25/exam-poll/backend/internal/env"
 	"github.com/trivo25/exam-poll/backend/internal/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 	"math/rand"
@@ -46,7 +47,7 @@ func checkIdentifierExistance(idt string) bool {
 			panic(err)
 		}
 	}()
-	collection := c.Database("test-exam").Collection("exam-polls") /* TODO: col name .env */
+	collection := c.Database(env.ExamDatabase).Collection(env.ExamCollection)
 	ctx := context.Background()
 	amnt, err := collection.CountDocuments(ctx, bson.M{"idt": idt})
 	if err != nil {

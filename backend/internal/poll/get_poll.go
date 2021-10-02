@@ -3,6 +3,7 @@ package poll
 import (
 	"context"
 	"errors"
+	"github.com/trivo25/exam-poll/backend/internal/env"
 	"github.com/trivo25/exam-poll/backend/internal/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -15,7 +16,7 @@ func GetExistingPoll(idt string) (Poll, error) {
 			panic(err)
 		}
 	}()
-	collection := c.Database("test-exam").Collection("exam-polls") /* TODO: col name .env */
+	collection := c.Database(env.ExamDatabase).Collection(env.ExamCollection)
 	ctx := context.Background()
 
 	var poll Poll

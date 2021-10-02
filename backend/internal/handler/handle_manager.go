@@ -7,6 +7,8 @@ import (
 	"github.com/trivo25/exam-poll/backend/internal/poll"
 	"github.com/trivo25/exam-poll/backend/internal/vote"
 	"net/http"
+	"os"
+	"strings"
 	"time"
 )
 
@@ -21,14 +23,20 @@ func RequestHandler() {
 	r.HandleFunc("/editPoll", poll.HandleEditPoll)
 	http.Handle("/", r)
 
+	corsList := os.Getenv("EXAM_POLL_CORS_LIST")
+	cr := strings.Split(corsList, ",")
+
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowedOrigins:   cr,
 		AllowCredentials: true,
 	})
 	h := c.Handler(r)
+
+	httpListenAddress := os.Getenv("EXAM_POLL_HTTP_LISTEN")
+
 	srv := &http.Server{
 		Handler: h,
-		Addr:    "127.0.0.1:8000", WriteTimeout: 15 * time.Second,
+		Addr:    httpListenAddress, WriteTimeout: 15 * time.Second,
 		ReadTimeout: 15 * time.Second,
 	}
 

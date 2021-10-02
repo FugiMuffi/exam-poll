@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/trivo25/exam-poll/backend/internal/env"
 	"github.com/trivo25/exam-poll/backend/internal/mongo"
 	"github.com/trivo25/exam-poll/backend/internal/poll"
 	"go.mongodb.org/mongo-driver/bson"
@@ -29,7 +30,7 @@ func castVote(fingerprint string, idt string, grade string) (poll.Poll, error) {
 			panic(err)
 		}
 	}()
-	collection := c.Database("test-exam").Collection("exam-polls") /* TODO: col name .env */
+	collection := c.Database(env.ExamDatabase).Collection(env.ExamCollection)
 	ctx := context.Background()
 
 	newPoll, err := poll.GetExistingPoll(idt)
@@ -70,7 +71,7 @@ func verifyVote(fingerprint string, idt string, vote string) bool {
 			panic(err)
 		}
 	}()
-	collection := c.Database("test-exam").Collection("exam-polls") /* TODO: col name .env */
+	collection := c.Database(env.ExamDatabase).Collection(env.ExamCollection)
 	ctx := context.Background()
 
 	var poll poll.Poll
