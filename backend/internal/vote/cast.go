@@ -50,12 +50,13 @@ func castVote(fingerprint string, idt string, grade string) (poll.Poll, error) {
 		"duration":     newPoll.Duration,
 		"results":      newPoll.Results,
 		"participants": newPoll.Participants,
+		"edit":         newPoll.EditCode,
 	}).Decode(&result)
 
 	if err != nil {
 		return poll.Poll{}, errors.New("some error occurred casting your vote")
 	}
-
+	newPoll.EditCode = ""
 	return newPoll, nil
 
 }
