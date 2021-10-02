@@ -9,6 +9,8 @@ import { useRouter } from 'next/router'
 import CreatePollForm from 'components/createPollForm'
 import CastVoteForm from 'components/castVoteForm'
 import VoteResults from 'components/voteResults'
+//@ts-ignore
+import getBrowserFingerprint from 'get-browser-fingerprint';
 
 
 type Props = { data: GetPollData } & { errorCode: number, errorMsg?: string }
@@ -43,7 +45,7 @@ const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
       },
       body: JSON.stringify({
         idt: data.idt,
-        fingerprint: 'TODO',
+        fingerprint: String(getBrowserFingerprint()),
         grade: form.vote.value
       })
     });
@@ -154,7 +156,7 @@ const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
               className={styles.voteForm}
               voteOptions={Object.keys(data.results)}
             />
-            <button onClick={() => {setShowResults(true);}}>Show Results</button>
+            <button className={styles.resultButton} onClick={() => {setShowResults(true);}}>Show Results</button>
           </>
         :
           <VoteResults
@@ -178,7 +180,7 @@ export async function getServerSideProps({ res, params }: GetServerSidePropsCont
   if (params) {
     const request = await fetch(`http://localhost:8000/getPoll/${params.idt}`);
     const resp: GetPoll = await request.json();
-    console.log(resp);
+    // console.log(resp);
 
     if (resp.Type === "success") {
       const data = resp.Data;

@@ -4,6 +4,8 @@ import styles from 'styles/Home.module.scss'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import CreatePollForm from 'components/createPollForm'
+//@ts-ignore
+import getBrowserFingerprint from 'get-browser-fingerprint';
 
 
 const Home: NextPage = () => {
@@ -27,7 +29,7 @@ const Home: NextPage = () => {
       body: JSON.stringify({
         title: form.title.value,
         description: form.description.value,
-        fingerprint: "some fingerprint",
+        fingerprint: String(getBrowserFingerprint()),
         duration: form.duration.value,
       })
     });

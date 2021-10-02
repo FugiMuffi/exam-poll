@@ -1395,6 +1395,11 @@ functional-red-black-tree@^1.0.1:
   resolved "https://registry.yarnpkg.com/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz#1b0ab3bd553b2a0d6399d29c0e3ea0b252078327"
   integrity sha1-GwqzvVU7Kg1jmdKcDj6gslIHgyc=
 
+get-browser-fingerprint@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/get-browser-fingerprint/-/get-browser-fingerprint-2.0.1.tgz#d4b4d61b26d37825f4d81ca9efc04707b21400ad"
+  integrity sha512-1pHyIBuzv5dgERs6U9abgRcfp8RnpUKLyMw9bgDi0v0l6GGJnqdktp8AhUDA7gEXl+PNQ0kL6BPYNk494zNEQQ==
+
 get-intrinsic@^1.0.2, get-intrinsic@^1.1.0, get-intrinsic@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/get-intrinsic/-/get-intrinsic-1.1.1.tgz#15f59f376f855c446963948f0d24cd3637b4abc6"
