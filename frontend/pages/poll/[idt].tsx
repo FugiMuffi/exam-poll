@@ -5,7 +5,6 @@ import Head from 'next/head'
 import Error from 'next/error'
 import Moment from 'react-moment'
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/router'
 import CreatePollForm from 'components/createPollForm'
 import CastVoteForm from 'components/castVoteForm'
 import VoteResults from 'components/voteResults'
@@ -38,7 +37,7 @@ const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
       vote: { value: string };
     };
 
-    const response = await fetch('http://localhost:8000/castVote', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASEURL}/castVote`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -76,7 +75,7 @@ const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
       duration: { value: string };
     };
 
-    const response = await fetch('http://localhost:8000/editPoll', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASEURL}/editPoll`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -178,7 +177,7 @@ export async function getServerSideProps({ res, params }: GetServerSidePropsCont
   let errorMsg: string = "";
 
   if (params) {
-    const request = await fetch(`http://localhost:8000/getPoll/${params.idt}`);
+    const request = await fetch(`${process.env.API_BASEURL}/getPoll/${params.idt}`);
     const resp: GetPoll = await request.json();
     // console.log(resp);
 

@@ -21,7 +21,7 @@ const Home: NextPage = () => {
       duration: { value: string };
     };
 
-    const response = await fetch('http://localhost:8000/createPoll', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASEURL}/createPoll`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
