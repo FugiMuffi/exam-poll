@@ -7,6 +7,8 @@ import Moment from 'react-moment'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import CreatePollForm from 'components/createPollForm'
+import CastVoteForm from 'components/castVoteForm'
+import VoteResults from 'components/voteResults'
 
 
 type Props = { data: GetPollData } & { errorCode: number, errorMsg?: string }
@@ -16,12 +18,12 @@ const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
 
   const end_date = new Date(data.end_time * 1000);
 
-  const router = useRouter();
-
-  const [pollData, setPollData] = useState<GetPollData>(data);
+  const [pollData, setPollData] = useState(data);
   const [timerFinished, setTimerFinished] = useState(false);
   const [editCode, setEditCode] = useState("");
   const [editModalVisible, setEditModalVisible] = useState(false);
+  const [userVote, setUserVote] = useState("");
+  const [showResults, setShowResults] = useState(false);
 
   const checkTimerFinished = () => {
     if (!timerFinished && end_date < new Date()) setTimerFinished(true);
@@ -46,7 +48,7 @@ const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
       })
     });
 
-    const res = await response.json();
+    const res: GetPoll = await response.json();
     console.log(res);
 
     if (res.Type == "failure") {
@@ -55,8 +57,10 @@ const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
     }
 
     if (res.Type == "success") {
+      window.localStorage.setItem(res.Data.idt, form.vote.value);
+      setUserVote(form.vote.value);
       setPollData(res.Data);
-      //TODO: hide vote, show results
+      setShowResults(true);
       return
     }
   }
@@ -98,16 +102,15 @@ const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
     }
   }
 
-  const voteOptions = Object.keys(data.results).map((item, i) =>
-    <li key={i}>
-      <input type="radio" name="vote" id={`option_${item}`} value={item} />
-      <label htmlFor={`option_${item}`}>{item}</label>
-    </li>
-  )
-
   // componentDidMount
   useEffect(() => {
     if (window.location.hash) setEditCode(window.location.hash.replace('#', ''));
+
+    const vote = window.localStorage.getItem(data.idt);
+    if (vote) {
+      setUserVote(vote);
+      setShowResults(true);
+    }
   }, [])
 
   // set initial timer state
@@ -144,10 +147,24 @@ const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
         <p>{pollData.description}</p>
         <p>{ timerFinished ? 'This poll has ended.' : <>This poll ends <Moment fromNow date={end_date} onChange={checkTimerFinished} />.</> }</p>
 
-        <form onSubmit={castVote} className={styles.voteForm}>
-          <ul>{voteOptions}</ul>
-          <button type="submit">Vote</button>
-        </form>
+        {!showResults ?
+          <>
+            <CastVoteForm
+              onSubmit={castVote}
+              className={styles.voteForm}
+              voteOptions={Object.keys(data.results)}
+            />
+            <button onClick={() => {setShowResults(true);}}>Show Results</button>
+          </>
+        :
+          <VoteResults
+            className={styles.voteResults}
+            classNameHighlight={styles.userVote}
+            results={pollData.results}
+            userVote={userVote}
+          />
+        }
+
       </main>
     </>
   )

@@ -50,7 +50,12 @@
   }
 }
 
-.voteForm ul {
+.voteForm ul,
+.voteResults {
   list-style: none;
   padding-inline-start: 0;
+}
+
+.voteResults .userVote {
+  font-weight: bold;
 }
