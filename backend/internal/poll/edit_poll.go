@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/trivo25/exam-poll/backend/internal/env"
 	"github.com/trivo25/exam-poll/backend/internal/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -17,7 +18,7 @@ func HandlePollEdit(p Poll) (Poll, error) {
 			panic(err)
 		}
 	}()
-	collection := c.Database("test-exam").Collection("exam-polls") /* TODO: col name .env */
+	collection := c.Database(env.ExamDatabase).Collection(env.ExamCollection)
 	ctx := context.Background()
 
 	tempPoll, err := GetExistingPoll(p.Idt)

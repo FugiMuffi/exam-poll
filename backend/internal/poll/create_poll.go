@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/trivo25/exam-poll/backend/internal/env"
 	"reflect"
 
 	goaway "github.com/TwinProduction/go-away"
@@ -63,7 +64,7 @@ func insertNewPoll(p Poll) error {
 			panic(err)
 		}
 	}()
-	collection := c.Database("test-exam").Collection("exam-polls") /* TODO: col name .env */
+	collection := c.Database(env.ExamDatabase).Collection(env.ExamCollection)
 	ctx := context.Background()
 	_, err := collection.InsertOne(ctx,
 		bson.M{

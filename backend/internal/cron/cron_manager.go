@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jasonlvhit/gocron"
+	"github.com/trivo25/exam-poll/backend/internal/env"
 	"github.com/trivo25/exam-poll/backend/internal/mongo"
 	"github.com/trivo25/exam-poll/backend/internal/poll"
 	"go.mongodb.org/mongo-driver/bson"
@@ -43,7 +44,7 @@ func RefreshPollState() error {
 			panic(err)
 		}
 	}()
-	collection := c.Database("test-exam").Collection("exam-polls") /* TODO: col name .env */
+	collection := c.Database(env.ExamDatabase).Collection(env.ExamCollection) /* TODO: col name .env */
 	ctx := context.Background()
 
 	cur, err := collection.Find(ctx, bson.M{"state": "active"})
@@ -84,7 +85,7 @@ func updatePoll(p poll.Poll) {
 			panic(err)
 		}
 	}()
-	collection := c.Database("test-exam").Collection("exam-polls") /* TODO: col name .env */
+	collection := c.Database(env.ExamDatabase).Collection(env.ExamCollection)
 	ctx := context.Background()
 
 	var result poll.Poll
