@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  db:
+    image: mongo
+    container_name: exam-poll_db
+    restart: unless-stopped
+    networks:
+    - internal
+    expose:
+    - "27017"
+    volumes:
+    - db:/data/db
+
+  backend:
+    container_name: exam-poll_backend
+    build: backend
+    restart: unless-stopped
+    depends_on:
+    - db
+    networks:
+    - internal
+    expose:
+    - "8000"
+    environment:
+    - EXAM_POLL_CORS_LIST=*
+    - EXAM_POLL_MONGODB=mongodb://db:27017
+    - EXAM_POLL_HTTP_LISTEN=0.0.0.0:8000
+    - EXAM_POLL_DATABASE=exam-poll
+    - EXAM_POLL_COLLECTION=polls
+
+  frontend:
+    container_name: exam-poll_frontend
+    build:
+      context: frontend
+      args:
+      - API_BASEURL=http://backend:8000
+      - NEXT_PUBLIC_API_BASEURL=http://localhost:8000
+    restart: unless-stopped
+    depends_on:
+    - backend
+    networks:
+    - internal
+    expose:
+    - "3000"
+
+networks:
+  internal:
+
+volumes:
+  db:

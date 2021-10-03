@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  backend:
+    networks:
+    - swag-net
+    environment:
+    - EXAM_POLL_CORS_LIST=poll.fugi.dev,frontend
+
+  frontend:
+    build:
+      args:
+      - NEXT_PUBLIC_API_BASEURL=https://poll-api.fugi.dev
+    networks:
+    - swag-net
+
+networks:
+  swag-net:
+    name: swag-net
+    external: true
