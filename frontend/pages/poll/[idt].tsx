@@ -12,19 +12,9 @@ import VoteResults from 'components/voteResults'
 import getBrowserFingerprint from 'get-browser-fingerprint';
 
 
-type Props = { data: GetPollData } & { errorCode: number, errorMsg?: string }
+type Props = { data: GetPollData, idt?: string } & { errorCode: number, errorMsg?: string }
 
-const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
-  if (errorCode) return <Error statusCode={errorCode} title={errorMsg} />
-
-  const end_date = new Date(data.end_time * 1000);
-
-  const [pollData, setPollData] = useState(data);
-  const [timerFinished, setTimerFinished] = useState(false);
-  const [editCode, setEditCode] = useState("");
-  const [editModalVisible, setEditModalVisible] = useState(false);
-  const [userVote, setUserVote] = useState("");
-  const [showResults, setShowResults] = useState(false);
+const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
 
   const checkTimerFinished = () => {
     if (!timerFinished && end_date < new Date()) setTimerFinished(true);
@@ -103,18 +93,29 @@ const Poll: NextPage<Props> = ({ data, errorCode, errorMsg }) => {
     }
   }
 
+  const [pollData, setPollData] = useState(data);
+  const [timerFinished, setTimerFinished] = useState(false);
+  const [editCode, setEditCode] = useState("");
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [userVote, setUserVote] = useState("");
+  const [showResults, setShowResults] = useState(false);
+
   // componentDidMount
   useEffect(() => {
     if (window.location.hash) setEditCode(window.location.hash.replace('#', ''));
 
-    const vote = window.localStorage.getItem(data.idt);
-    if (vote) {
-      setUserVote(vote);
-      setShowResults(true);
+    if (idt) {
+      const vote = window.localStorage.getItem(idt);
+      if (vote) {
+        setUserVote(vote);
+        setShowResults(true);
+      }
     }
-  }, [])
+  }, [idt])
 
-  // set initial timer state
+  if (errorCode) return <Error statusCode={errorCode} title={errorMsg} />
+
+  const end_date = new Date(data.end_time * 1000);
   checkTimerFinished();
 
   return (
@@ -185,7 +186,7 @@ export async function getServerSideProps({ res, params }: GetServerSidePropsCont
       const data = resp.Data;
 
       return {
-        props: { data },
+        props: { data, idt: params.idt },
       }
     } else {
       errorCode = resp.ErrorCode;
