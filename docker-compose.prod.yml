@@ -5,7 +5,7 @@ services:
     networks:
     - swag-net
     environment:
-    - EXAM_POLL_CORS_LIST=poll.fugi.dev,frontend
+    - EXAM_POLL_CORS_LIST=https://poll.fugi.dev,frontend
 
   frontend:
     build:
