@@ -1,28 +1,14 @@
-import type { FunctionComponent, FormEventHandler } from 'react'
+import type { FunctionComponent } from "react";
+import ResultChart from "components/resultsChart";
 
 type Props = {
-  className?: string,
-  classNameHighlight?: string,
   results: {
-    [option: string]: number
-  },
-  userVote: string
-}
+    [option: string]: number;
+  };
+};
 
-const VoteResults: FunctionComponent<Props> = ({
-  className,
-  classNameHighlight,
-  results,
-  userVote
-}) => {
-  const li = Object.entries(results).map( ([key, value], i) =>
-    <li key={i} className={ (userVote === key) ? classNameHighlight : undefined }>
-      <span>{key}: </span>
-      <span>{value}</span>
-    </li>
-  );
+const VoteResults: FunctionComponent<Props> = ({ results }) => {
+  return <ResultChart results={results} />;
+};
 
-  return <ul className={className}>{li}</ul>
-}
-
-export default VoteResults
+export default VoteResults;

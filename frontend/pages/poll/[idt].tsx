@@ -230,12 +230,7 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
             <button className={styles.resultButton} onClick={() => {setShowResults(true);}}>Show Results</button>
           </>
         :
-          <VoteResults
-            className={styles.voteResults}
-            classNameHighlight={styles.userVote}
-            results={pollData.results}
-            userVote={userVote}
-          />
+          <VoteResults results={pollData.results} />
         }
 
       </main>

@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "d3": "^7.1.1",
     "get-browser-fingerprint": "^2.0.1",
     "moment": "^2.29.1",
     "next": "11.1.2",
