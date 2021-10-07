@@ -11,16 +11,17 @@ const CastVoteForm: FunctionComponent<Props> = ({
   className,
   voteOptions
 }) => {
-  const li = voteOptions.map((item, i) =>
-    <li key={i}>
+  const options = voteOptions.map((item, i) =>
+    <label className="radio" key={i}>
+      <span>{item}</span>
       <input type="radio" name="vote" id={`option_${item}`} value={item} />
-      <label htmlFor={`option_${item}`}>{item}</label>
-    </li>
+      <span className="checkmark"/>
+    </label>
   )
 
   return (
     <form onSubmit={onSubmit} className={className}>
-      <ul>{li}</ul>
+      <div>{options}</div>
       <button type="submit">Vote</button>
     </form>
   )

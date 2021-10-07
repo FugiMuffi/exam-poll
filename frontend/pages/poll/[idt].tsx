@@ -5,11 +5,14 @@ import Head from 'next/head'
 import Error from 'next/error'
 import Moment from 'react-moment'
 import { useState, useEffect } from 'react'
+import { use100vh } from 'react-div-100vh'
+//@ts-ignore
+import getBrowserFingerprint from 'get-browser-fingerprint';
+import { FaPencilAlt } from 'react-icons/fa'
+import { IoMdClose } from 'react-icons/io'
 import CreatePollForm from 'components/createPollForm'
 import CastVoteForm from 'components/castVoteForm'
 import VoteResults from 'components/voteResults'
-//@ts-ignore
-import getBrowserFingerprint from 'get-browser-fingerprint';
 
 
 type Props = { data: GetPollData, idt?: string } & { errorCode: number, errorMsg?: string }
@@ -99,6 +102,30 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [userVote, setUserVote] = useState("");
   const [showResults, setShowResults] = useState(false);
+  const height = use100vh();
+  const screenHeight = height ? `${height}px` : '100vh';
+
+  const editModal = (
+    <div id={styles.backdrop} style={{display: editModalVisible ? "flex" : "none"}} onClick={() => {setEditModalVisible(false)}}>
+      <div id={styles.editModal} onClick={(e) => {e.stopPropagation();}}>
+        <a className={styles.closeButton} onClick={() => {setEditModalVisible(false)}}>
+          <IoMdClose/>
+        </a>
+
+        <div className={styles.wrapper}>
+          <h3>Edit Poll</h3>
+
+          <CreatePollForm edit
+            onSubmit={editPoll}
+            className={styles.form}
+            title={pollData.title}
+            description={pollData.description}
+            duration={pollData.duration}
+          />
+        </div>
+      </div>
+    </div>
+  )
 
   // componentDidMount
   useEffect(() => {
@@ -125,28 +152,21 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
         <meta name="description" content={pollData.description} />
       </Head>
 
-      { editCode ?
-      <div id={styles.backdrop} style={{display: editModalVisible ? "flex" : "none"}}>
-        <div id={styles.editModal}>
-          <h3>Edit Poll</h3>
-          <button className={styles.closeButton} onClick={() => {setEditModalVisible(false)}}>Close</button>
-          <CreatePollForm edit
-            onSubmit={editPoll}
-            className={styles.form}
-            title={pollData.title}
-            description={pollData.description}
-            duration={pollData.duration}
-          />
-        </div>
-      </div>
-      : '' }
+      <style jsx>{`
+        main {
+          --screen-height: ${screenHeight};
+        }
+      `}</style>
+
+      { editCode ? editModal : '' }
 
       <main className={styles.main}>
-        <h1>{pollData.title}</h1>
+        <h1>
+          {pollData.title}
+          { editCode ? <a className={styles.editButton} onClick={() => {setEditModalVisible(true)}}><FaPencilAlt/></a> : '' }
+        </h1>
 
-        { editCode ? <button onClick={() => {setEditModalVisible(true)}}>Edit</button> : '' }
-
-        <p>{pollData.description}</p>
+        { pollData.description.length > 0 ? <p>{pollData.description}</p> : '' }
         <p>{ timerFinished ? 'This poll has ended.' : <>This poll ends <Moment fromNow date={end_date} onChange={checkTimerFinished} />.</> }</p>
 
         {!showResults ?
