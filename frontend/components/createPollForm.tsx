@@ -15,18 +15,16 @@ const CreatePollForm: FunctionComponent<Props> = ({
   edit = false,
   title,
   description,
-  duration = "1d"
+  duration = ""
 }) => {
   return (
     <form onSubmit={onSubmit} className={className}>
-      <label htmlFor="poll_title">Title</label>
-      <input type="text" id="poll_title" name="title" defaultValue={title} />
+      <input type="text" id="poll_title" name="title" defaultValue={title} placeholder="Title" required />
 
-      <label htmlFor="poll_description">Description</label>
-      <input type="text" id="poll_description" name="description" defaultValue={description} />
+      <input type="text" id="poll_description" name="description" defaultValue={description} placeholder="Description" />
 
-      <label htmlFor="poll_duration">Duration</label>
-      <select id="poll_duration" name="duration" defaultValue={duration} disabled={edit}>
+      <select id="poll_duration" name="duration" defaultValue={duration} disabled={edit} required>
+        <option value="" disabled hidden>Duration</option>
         <option value="4h">4h</option>
         <option value="8h">8h</option>
         <option value="12h">12h</option>
