@@ -5,6 +5,7 @@ import Head from 'next/head'
 import Error from 'next/error'
 import Moment from 'react-moment'
 import { useState, useEffect } from 'react'
+import { use100vh } from 'react-div-100vh'
 //@ts-ignore
 import getBrowserFingerprint from 'get-browser-fingerprint';
 import { FaPencilAlt } from 'react-icons/fa'
@@ -101,6 +102,8 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [userVote, setUserVote] = useState("");
   const [showResults, setShowResults] = useState(false);
+  const height = use100vh();
+  const screenHeight = height ? `${height}px` : '100vh';
 
   const editModal = (
     <div id={styles.backdrop} style={{display: editModalVisible ? "flex" : "none"}} onClick={() => {setEditModalVisible(false)}}>
@@ -148,6 +151,12 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
         <title>{pollData.title}</title>
         <meta name="description" content={pollData.description} />
       </Head>
+
+      <style jsx>{`
+        main {
+          --screen-height: ${screenHeight};
+        }
+      `}</style>
 
       { editCode ? editModal : '' }
 

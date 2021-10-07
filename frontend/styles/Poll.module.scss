@@ -1,7 +1,8 @@
 @import 'theme';
 
 .main {
-  min-height: 100vh;
+  --screen-height: 100vh;
+  min-height: calc(var(--screen-height) - #{$footer-height});
   padding: 5rem 0.5rem;
   display: flex;
   flex-direction: column;
