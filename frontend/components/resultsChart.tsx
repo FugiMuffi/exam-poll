@@ -1,22 +1,24 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
 
-interface TitleProps {
+type ResultChartProps = {
   results: {
-      [option: string]: number;
-    };
+    [option: string]: number;
+  };
 }
 
-class ResultChart extends Component {
-  constructor(props: TitleProps) {
+class ResultChart extends Component<ResultChartProps> {
+  divRef: React.RefObject<HTMLDivElement>;
+
+  constructor(props: ResultChartProps) {
     super(props);
-    this.divRef = React.createRef();
+    this.divRef = React.createRef<HTMLDivElement>();
   }
 
   componentDidMount() {
-    const width = 400,
-          height = 400,
-          margin = 10;
+    const width = 400;
+    const height = 400;
+    const margin = 10;
 
     const radius = Math.min(width, height) / 2 - margin;
 
@@ -37,7 +39,7 @@ class ResultChart extends Component {
 
     const color = d3
       .scaleOrdinal()
-      .domain(data)
+      .domain(Object.keys(data))
       //Colorscheme
       .range(["#1a535c", "#4ecdc4", "#f7fff7", "#ff6b6b", "#ffe66d"]);
 
