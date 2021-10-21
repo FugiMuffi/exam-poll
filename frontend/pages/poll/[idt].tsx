@@ -47,7 +47,14 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
     console.log(res);
 
     if (res.Type == "failure") {
-      alert(res.Error);
+      const timeOfError = new Date();
+      if (confirm(res.Error + "\n\nSend report?")) {
+        let body = "timestamp: " + timeOfError.getTime();
+        body += "\nfingerprint: " + String(getBrowserFingerprint());
+        body += "\npollData: " + JSON.stringify(pollData);
+        body += "\nres: " + JSON.stringify(res);
+        window.open("mailto:lucas@fugi.dev?subject=Bug%20Report&body=" + encodeURI(body));
+      }
       return
     }
 
