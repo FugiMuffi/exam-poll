@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
 
-type ResultChartProps = {
+type ResultPieChartProps = {
   results: {
     [option: string]: number;
   };
 }
 
-class ResultChart extends Component<ResultChartProps> {
+class ResultPieChart extends Component<ResultPieChartProps> {
   divRef: React.RefObject<HTMLDivElement>;
 
-  constructor(props: ResultChartProps) {
+  constructor(props: ResultPieChartProps) {
     super(props);
     this.divRef = React.createRef<HTMLDivElement>();
   }
@@ -32,7 +32,7 @@ class ResultChart extends Component<ResultChartProps> {
 
     const pie = d3.pie().value((d) => d[1]);
 
-    // Just show entries, which were selected more than once
+    // Just show entries which were selected at least once
     const data = Object.entries(this.props.results).filter(
       ([_, value]) => value > 0
     );
@@ -68,4 +68,4 @@ class ResultChart extends Component<ResultChartProps> {
   }
 }
 
-export default ResultChart;
+export default ResultPieChart;
