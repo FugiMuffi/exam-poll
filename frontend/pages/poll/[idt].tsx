@@ -6,7 +6,7 @@ import Error from 'next/error'
 import Moment from 'react-moment'
 import React, { useState, useEffect, useRef } from 'react'
 import { use100vh } from 'react-div-100vh'
-import { v4 } from 'uuid'
+import { nanoid } from 'nanoid'
 import ReactTooltip from 'react-tooltip';
 import { FaPencilAlt } from 'react-icons/fa'
 import { IoMdClose } from 'react-icons/io'
@@ -38,7 +38,7 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
       body: JSON.stringify({
         idt: data.idt,
         // hack until fingerprint check is removed on the server side
-        fingerprint: v4(),
+        fingerprint: nanoid(),
         grade: form.vote.value
       })
     });
