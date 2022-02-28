@@ -6,8 +6,7 @@ import Error from 'next/error'
 import Moment from 'react-moment'
 import React, { useState, useEffect, useRef } from 'react'
 import { use100vh } from 'react-div-100vh'
-//@ts-ignore
-import getBrowserFingerprint from 'get-browser-fingerprint';
+import { v4 } from 'uuid'
 import ReactTooltip from 'react-tooltip';
 import { FaPencilAlt } from 'react-icons/fa'
 import { IoMdClose } from 'react-icons/io'
@@ -38,7 +37,8 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
       },
       body: JSON.stringify({
         idt: data.idt,
-        fingerprint: String(getBrowserFingerprint()),
+        // hack until fingerprint check is removed on the server side
+        fingerprint: v4(),
         grade: form.vote.value
       })
     });
@@ -50,7 +50,6 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
       const timeOfError = new Date();
       if (confirm(res.Error + "\n\nSend report?")) {
         let body = "timestamp: " + timeOfError.getTime();
-        body += "\nfingerprint: " + String(getBrowserFingerprint());
         body += "\npollData: " + JSON.stringify(pollData);
         body += "\nres: " + JSON.stringify(res);
         window.open("mailto:lucas@fugi.dev?subject=Bug%20Report&body=" + encodeURI(body));
