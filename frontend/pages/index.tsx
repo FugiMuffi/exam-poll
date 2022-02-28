@@ -5,9 +5,6 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { use100vh } from 'react-div-100vh'
 import CreatePollForm from 'components/createPollForm'
-//@ts-ignore
-import getBrowserFingerprint from 'get-browser-fingerprint';
-
 
 const Home: NextPage = () => {
   const height = use100vh();
@@ -32,7 +29,6 @@ const Home: NextPage = () => {
       body: JSON.stringify({
         title: form.title.value,
         description: form.description.value,
-        fingerprint: String(getBrowserFingerprint()),
         duration: form.duration.value,
       })
     });

@@ -4,10 +4,10 @@ import styles from 'styles/Poll.module.scss'
 import Head from 'next/head'
 import Error from 'next/error'
 import Moment from 'react-moment'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { use100vh } from 'react-div-100vh'
-//@ts-ignore
-import getBrowserFingerprint from 'get-browser-fingerprint';
+import { nanoid } from 'nanoid'
+import ReactTooltip from 'react-tooltip';
 import { FaPencilAlt } from 'react-icons/fa'
 import { IoMdClose } from 'react-icons/io'
 import CreatePollForm from 'components/createPollForm'
@@ -37,7 +37,8 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
       },
       body: JSON.stringify({
         idt: data.idt,
-        fingerprint: String(getBrowserFingerprint()),
+        // hack until fingerprint check is removed on the server side
+        fingerprint: nanoid(),
         grade: form.vote.value
       })
     });
@@ -46,7 +47,13 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
     console.log(res);
 
     if (res.Type == "failure") {
-      alert(res.Error);
+      const timeOfError = new Date();
+      if (confirm(res.Error + "\n\nSend report?")) {
+        let body = "timestamp: " + timeOfError.getTime();
+        body += "\npollData: " + JSON.stringify(pollData);
+        body += "\nres: " + JSON.stringify(res);
+        window.open("mailto:lucas@fugi.dev?subject=Bug%20Report&body=" + encodeURI(body));
+      }
       return
     }
 
@@ -96,14 +103,39 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
     }
   }
 
+  const copyURL: React.MouseEventHandler<HTMLInputElement> = async (e) => {
+    e.preventDefault();
+
+    const input = e.target as typeof e.target & {
+      value: string;
+      select: Function;
+    };
+
+    input.select();
+
+    navigator.clipboard.writeText(input.value).then(() => {
+      const tmp = tipText;
+      setTipText("Copied to clipboard!");
+      if (shareRef.current) ReactTooltip.show(shareRef.current);
+      setTimeout(() => {
+        setTipText(tmp);
+        const tooltip = document.getElementById('shareUrlTip');
+        if (shareRef.current && tooltip && window.getComputedStyle(tooltip).getPropertyValue("visibility") == 'visible')
+          ReactTooltip.show(shareRef.current);
+      }, 2000);
+    });
+  }
+
   const [pollData, setPollData] = useState(data);
   const [timerFinished, setTimerFinished] = useState(false);
   const [editCode, setEditCode] = useState("");
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [userVote, setUserVote] = useState("");
   const [showResults, setShowResults] = useState(false);
+  const [tipText, setTipText] = useState("Click to copy");
   const height = use100vh();
   const screenHeight = height ? `${height}px` : '100vh';
+  const shareRef = useRef<HTMLInputElement>(null);
 
   const editModal = (
     <div id={styles.backdrop} style={{display: editModalVisible ? "flex" : "none"}} onClick={() => {setEditModalVisible(false)}}>
@@ -163,11 +195,36 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
       <main className={styles.main}>
         <h1>
           {pollData.title}
-          { editCode ? <a className={styles.editButton} onClick={() => {setEditModalVisible(true)}}><FaPencilAlt/></a> : '' }
+          { editCode ? <a className={styles.editButton} onClick={() => setEditModalVisible(true)}><FaPencilAlt/></a> : '' }
         </h1>
 
         { pollData.description.length > 0 ? <p>{pollData.description}</p> : '' }
         <p>{ timerFinished ? 'This poll has ended.' : <>This poll ends <Moment fromNow date={end_date} onChange={checkTimerFinished} />.</> }</p>
+
+        { editCode && typeof window.location !== 'undefined' ? <>
+        <div>
+          Share this poll:
+          <input
+            type="text"
+            className={styles.shareURL}
+            ref={shareRef}
+            readOnly
+            onClick={copyURL}
+            defaultValue={window.location.href.replace(location.hash,'')}
+            data-tip
+            data-for="shareUrlTip"
+          />
+          <ReactTooltip
+            id="shareUrlTip"
+            place="bottom"
+            effect="solid"
+            backgroundColor="#000"
+            textColor="#fff"
+          >
+            {tipText}
+          </ReactTooltip>
+        </div>
+        </> : '' }
 
         {!showResults ?
           <>
@@ -179,12 +236,7 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
             <button className={styles.resultButton} onClick={() => {setShowResults(true);}}>Show Results</button>
           </>
         :
-          <VoteResults
-            className={styles.voteResults}
-            classNameHighlight={styles.userVote}
-            results={pollData.results}
-            userVote={userVote}
-          />
+          <VoteResults results={pollData.results} />
         }
 
       </main>
