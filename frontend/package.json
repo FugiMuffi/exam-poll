@@ -14,7 +14,7 @@
     "d3": "^7.1.1",
     "get-browser-fingerprint": "^2.0.1",
     "moment": "^2.29.1",
-    "next": "11.1.2",
+    "next": "^12.1.0",
     "react": "17.0.2",
     "react-div-100vh": "^0.6.0",
     "react-dom": "17.0.2",
@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/d3": "^7.0.0",
+    "@types/node": "^17.0.21",
     "@types/react": "17.0.24",
     "eslint": "7.32.0",
     "eslint-config-next": "11.1.2",
