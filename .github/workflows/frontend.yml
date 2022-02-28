@@ -1,12 +1,17 @@
-name: CI
+name: frontend
 
 on:
   push:
+    paths:
+      - "frontend/**"
   pull_request:
 
 jobs:
-  build:
+  frontend:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v2
