@@ -45,37 +45,27 @@ class ResultBarChart extends Component<ResultBarChartProps> {
         .data(data.map(v => v[1]))
         .enter()
         .append("g")
-        .attr("transform", function(d, i) {
-          return "translate(" + i * (barWidth + margin) + ", " + (height - scale(d)) + ")";
-        });
-      
+        .attr("transform", (d, i) =>  "translate(" + i * (barWidth + margin) + ", " + (height - scale(d)) + ")");
+
       g.append("rect")
-        .attr("height", function(d) {
-          return scale(d);
-        })
+        .attr("height", d => scale(d))
         .attr("width", barWidth)
         .attr("fill", "#f7fff7");
-      
+
       g.append("text")
         .attr("alignment-baseline", "central")
         .attr("dy", "-1em")
         .attr("text-anchor", "middle")
         .attr("dx", barWidth / 2)
-        .attr("transform", function(d) {
-          return "translate(" + 0 + ", " + scale(d) + ")";
-        })
-        .text(function(d, i) {
-          return data[i][0];
-        });
-      
+        .attr("transform", d => "translate(" + 0 + ", " + scale(d) + ")")
+        .text((d, i) => data[i][0]);
+
       g.append("text")
         .attr("alignment-baseline", "central")
         .attr("dy", "1em")
         .attr("text-anchor", "middle")
         .attr("dx", barWidth / 2)
-        .text(function(d, i) {
-          return data[i][1];
-        });
+        .text((d, i) => data[i][1]);
     }
   }
 
