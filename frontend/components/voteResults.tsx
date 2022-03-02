@@ -12,26 +12,21 @@ type Props = {
 
 const VoteResults: FunctionComponent<Props> = ({ results }) => {
   const [showBarChart, setShowBarChart] = useState(true);
-  
+
+  const Chart = showBarChart ? ResultBarChart : ResultPieChart;
+
   return (
     <>
-      { showBarChart ?
-        <ResultBarChart results={results} />
-        :
-        <ResultPieChart results={results} />
+      <Chart results={results} />
+
+      { Object.entries(results).filter( ([_, value]) => value > 0 ).length > 0
+        ? <p>Failure Rate: {calculateFailureRate(results)}%</p>
+        : ''
       }
 
-      { Object.entries(results).filter( ([_, value]) => value > 0 ).length > 0 ? 
-        <p>Failure Rate: {calculateFailureRate(results)}%</p>
-        : 
-        ''
-      }
-
-      { showBarChart ?
-        <button className={styles.resultButton} onClick={() => {setShowBarChart(false);}}>Show Pie Chart</button>
-        :
-        <button className={styles.resultButton} onClick={() => {setShowBarChart(true);}}>Show Bar Chart</button>
-      }
+      <button className={styles.resultButton} onClick={() => setShowBarChart(!showBarChart)}>
+        Show {showBarChart ? 'Pie' : 'Bar'} Chart
+      </button>
     </>
   );
 };
