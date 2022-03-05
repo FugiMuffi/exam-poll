@@ -137,6 +137,21 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
   const screenHeight = height ? `${height}px` : '100vh';
   const shareRef = useRef<HTMLInputElement>(null);
 
+  // componentDidMount
+  useEffect(() => {
+    if (window.location.hash) setEditCode(window.location.hash.replace('#', ''));
+
+    if (idt) {
+      const vote = window.localStorage.getItem(idt);
+      if (vote) {
+        setUserVote(vote);
+        setShowResults(true);
+      }
+    }
+  }, [idt])
+
+  if (errorCode) return <Error statusCode={errorCode} title={errorMsg} />
+
   const editModal = (
     <div id={styles.backdrop} style={{display: editModalVisible ? "flex" : "none"}} onClick={() => {setEditModalVisible(false)}}>
       <div id={styles.editModal} onClick={(e) => {e.stopPropagation();}}>
@@ -158,21 +173,6 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
       </div>
     </div>
   )
-
-  // componentDidMount
-  useEffect(() => {
-    if (window.location.hash) setEditCode(window.location.hash.replace('#', ''));
-
-    if (idt) {
-      const vote = window.localStorage.getItem(idt);
-      if (vote) {
-        setUserVote(vote);
-        setShowResults(true);
-      }
-    }
-  }, [idt])
-
-  if (errorCode) return <Error statusCode={errorCode} title={errorMsg} />
 
   const end_date = new Date(data.end_time * 1000);
   checkTimerFinished();
