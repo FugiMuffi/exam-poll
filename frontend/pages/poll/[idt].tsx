@@ -226,7 +226,7 @@ const Poll: NextPage<Props> = ({ data, idt, errorCode, errorMsg }) => {
         </div>
         </> : '' }
 
-        {!showResults ?
+        { !timerFinished && !showResults ?
           <>
             <CastVoteForm
               onSubmit={castVote}
