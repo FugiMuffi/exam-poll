@@ -10,6 +10,7 @@ type ResultPieChartProps = {
 
 class ResultPieChart extends Component<ResultPieChartProps> {
   divRef: React.RefObject<HTMLDivElement>;
+  radius = 150;
 
   constructor(props: ResultPieChartProps) {
     super(props);
@@ -17,19 +18,11 @@ class ResultPieChart extends Component<ResultPieChartProps> {
   }
 
   componentDidMount() {
-    const width = 400;
-    const height = 400;
-    const margin = 10;
-
-    const radius = Math.min(width, height) / 2 - margin;
-
     const svg = d3
       .select(this.divRef.current)
       .append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .append("g")
-      .attr("transform", `translate(${width / 2}, ${height / 2})`);
+      .attr("width", "100%")
+      .attr("viewBox", `${- this.radius} ${- this.radius} ${this.radius * 2} ${this.radius * 2}`);
 
     const pie = d3.pie().value((d) => d[1]);
 
@@ -44,7 +37,7 @@ class ResultPieChart extends Component<ResultPieChartProps> {
       //Colorscheme
       .range(["#1a535c", "#4ecdc4", "#f7fff7", "#ff6b6b", "#ffe66d"]);
 
-    const arc = d3.arc().innerRadius(0).outerRadius(radius);
+    const arc = d3.arc().innerRadius(0).outerRadius(this.radius);
     svg
       .selectAll("arc")
       .data(pie(data))
@@ -65,7 +58,16 @@ class ResultPieChart extends Component<ResultPieChartProps> {
   }
 
   render() {
-    return <div ref={this.divRef}></div>;
+    return <>
+      <style jsx>{`
+        div {
+          width: 100%;
+          max-width: ${this.radius * 2}px;
+          margin-bottom: 1rem;
+        }
+      `}</style>
+      <div ref={this.divRef}></div>
+    </>
   }
 }
 
