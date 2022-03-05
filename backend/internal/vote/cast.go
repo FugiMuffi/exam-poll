@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 	"github.com/trivo25/exam-poll/backend/internal/env"
 	"github.com/trivo25/exam-poll/backend/internal/mongo"
 	"github.com/trivo25/exam-poll/backend/internal/poll"
@@ -90,6 +91,10 @@ func verifyVote(fingerprint string, idt string, vote string) bool {
 	_, exist = votes[vote]
 
 	if !exist {
+		return false
+	}
+
+	if poll.EndTime < time.Now().Unix() {
 		return false
 	}
 
