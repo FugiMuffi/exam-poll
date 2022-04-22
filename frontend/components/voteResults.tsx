@@ -1,22 +1,24 @@
-import { FunctionComponent, useState } from "react";
+import { useState } from 'react'
 import styles from 'styles/Poll.module.scss'
-import ResultPieChart from "components/resultsPieChart";
-import ResultBarChart from "components/resultsBarChart";
+import ResultPieChart from 'components/resultsPieChart'
+import ResultBarChart from 'components/resultsBarChart'
 
 type Props = {
   results: {
-    [option: string]: number;
-  };
-};
+    [option: string]: number
+  }
+}
 
+const VoteResults: React.FC<Props> = ({ results }) => {
+  const [showBarChart, setShowBarChart] = useState(true)
 
-const VoteResults: FunctionComponent<Props> = ({ results }) => {
+  const Chart = showBarChart ? ResultBarChart : ResultPieChart
 
-  const [showBarChart, setShowBarChart] = useState(true);
+  const voteCount = Object.values(results).reduce((a, b) => a + b, 0)
 
-  const Chart = showBarChart ? ResultBarChart : ResultPieChart;
+  const failureRate = Math.round(results['5.0'] / voteCount * 100)
 
-  if (Object.values(results).reduce((a,b) => a + b, 0) === 0) {
+  if (voteCount === 0) {
     return <p>Nobody has voted (yet).</p>
   }
 
@@ -24,17 +26,17 @@ const VoteResults: FunctionComponent<Props> = ({ results }) => {
     <>
       <Chart results={results} />
 
-      <p>Failure Rate: {calculateFailureRate(results)}%</p>
+      <p>Total Votes: {voteCount}</p>
+      <p>Failure Rate: {failureRate}%</p>
 
-      <button className={styles.resultButton} onClick={() => setShowBarChart(!showBarChart)}>
+      <button
+        className={styles.resultButton}
+        onClick={() => setShowBarChart(!showBarChart)}
+      >
         Show {showBarChart ? 'Pie' : 'Bar'} Chart
       </button>
     </>
-  );
-};
-
-function calculateFailureRate(results : Props["results"]) {
-  return Math.round(results['5.0'] / Object.entries(results).map(([_, value]) => value).reduce((s : any, a : any) => s + a, 0) * 100);
+  )
 }
 
-export default VoteResults;
+export default VoteResults
