@@ -1,8 +1,7 @@
-import type { FunctionComponent } from 'react'
 import styles from 'styles/Footer.module.scss'
 import { FaGithub } from 'react-icons/fa'
 
-const Footer: FunctionComponent = () => {
+const Footer: React.FC = () => {
   return (
     <footer className={styles.footer}>
       <span>
