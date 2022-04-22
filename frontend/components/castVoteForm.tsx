@@ -1,23 +1,23 @@
-import type { FunctionComponent, FormEventHandler } from 'react'
+import type { FormEventHandler } from 'react'
 
 type Props = {
-  onSubmit?: FormEventHandler<HTMLFormElement>,
-  className?: string,
+  onSubmit?: FormEventHandler<HTMLFormElement>
+  className?: string
   voteOptions: string[]
 }
 
-const CastVoteForm: FunctionComponent<Props> = ({
+const CastVoteForm: React.FC<Props> = ({
   onSubmit = () => {},
   className,
-  voteOptions
+  voteOptions,
 }) => {
-  const options = voteOptions.map((item, i) =>
+  const options = voteOptions.map((item, i) => (
     <label className="radio" key={i}>
       <span>{item}</span>
       <input type="radio" name="vote" id={`option_${item}`} value={item} />
-      <span className="checkmark"/>
+      <span className="checkmark" />
     </label>
-  )
+  ))
 
   return (
     <form onSubmit={onSubmit} className={className}>
